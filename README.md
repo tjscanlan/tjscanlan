@@ -17,10 +17,10 @@ I think the hard part of agentic AI isn't getting a demo to work once — it's *
 
 ## 🛠️ Tech Stack
 
-**Languages:** TypeScript, Python, Go, SQL
-**AI & Agents:** LLM API integration, MCP, tool invocation, structured outputs, multi-step reasoning, agent evaluation (EvalOps), vector search, cross-platform agent builders
-**Cloud & Infra:** GCP, AWS, Docker, Kubernetes, Terraform, Kafka, BigQuery
-**Practices:** CI/CD, observability, microservice architecture, API design (REST/gRPC), unit & integration testing, Agile
+- **Languages:** TypeScript, Python, Go, SQL
+- **AI & Agents:** LLM API integration, MCP, tool invocation, structured outputs, multi-step reasoning, agent evaluation (EvalOps), vector search, cross-platform agent builders
+- **Cloud & Infra:** GCP, AWS, Docker, Kubernetes, Terraform, Kafka, BigQuery
+- **Practices:** CI/CD, observability, microservice architecture, API design (REST/gRPC), unit & integration testing, Agile
 
 ## 📌 Pinned Projects
 
