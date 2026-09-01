@@ -2,9 +2,9 @@
 
 Senior AI/ML Engineer building and evaluating LLM-powered agents in production. I live at the intersection of **AI/ML Ops** and **platform engineering** — shipping agentic features and then building the evaluation infrastructure that proves they actually work.
 
-- 🔭 Currently building **agent evaluation frameworks (EvalOps)** at Entegris — versioned test suites, repeatable eval runs, and observability for tool invocation, structured outputs, and multi-step reasoning
-- 🤖 Deep in the **MCP / LLM API / agentic systems** world — tool calling, cross-platform agent builders, vector search
-- ⚙️ Background in **cybersecurity data engineering** — ETL pipelines, SQL data models, and containerized services that fed ML pipelines long before I was building the agents themselves
+- 🔭 Currently building **agent & model evaluation frameworks (EvalOps)** at Entegris — versioned test suites, offline/online eval pipelines, and quality metrics for tool invocation, structured outputs, and multi-step reasoning
+- 🤖 Deep in the **MCP / LLM API / ML systems** world — model training & fine-tuning, tool calling, cross-platform ML/agent builders, vector search
+- ⚙️ Background in **cybersecurity data engineering** — ETL pipelines, SQL data models, and containerized services that fed ML pipelines long before I was building and evaluating the models themselves
 - 🎓 B.S. in Mathematics, Minor in Data Science — Merrimack College
 - 📍 Based in the Boston area (Medford, MA)
 - 📫 Reach me at tjpscanlan.44@gmail.com or [LinkedIn](https://linkedin.com/in/tj-scanlan)
