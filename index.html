@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TJ Scanlan — Senior AI Engineer</title>
+<meta name="description" content="TJ Scanlan — Senior AI Engineer building and evaluating LLM-powered agents in production.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #10151a;
+    --panel: #161d24;
+    --panel-border: #263039;
+    --text: #e7edf2;
+    --text-dim: #8fa0ab;
+    --text-faint: #5c6b75;
+    --teal: #5fd9c6;
+    --teal-dim: rgba(95,217,198,0.13);
+    --amber: #f0b429;
+    --amber-dim: rgba(240,180,41,0.13);
+    --rail-w: 260px;
+    --content-max: 760px;
+    --mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    --sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+    *{ animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+  }
+
+  body{
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a{ color: var(--teal); text-decoration: none; }
+  a:hover{ text-decoration: underline; }
+  a:focus-visible, button:focus-visible, summary:focus-visible{
+    outline: 2px solid var(--teal);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  h1, h2, h3{ font-family: var(--sans); font-weight: 700; margin: 0; color: var(--text); }
+  p{ margin: 0 0 1em 0; color: var(--text-dim); }
+  code, .mono{ font-family: var(--mono); }
+
+  /* ---------- layout shell ---------- */
+  .shell{
+    display: flex;
+    min-height: 100vh;
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+
+  /* ---------- sidebar rail ---------- */
+  .rail{
+    width: var(--rail-w);
+    flex-shrink: 0;
+    padding: 48px 28px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--panel-border);
+  }
+
+  .rail-name{
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  .rail-role{
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--text-faint);
+    margin-top: 6px;
+    line-height: 1.5;
+  }
+
+  .rail-nav{
+    margin-top: 44px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .rail-nav a{
+    color: var(--text-dim);
+    font-size: 0.92rem;
+    padding: 7px 10px;
+    margin-left: -10px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: color 0.15s ease, background 0.15s ease;
+  }
+  .rail-nav a:hover{ color: var(--text); text-decoration: none; background: rgba(255,255,255,0.03); }
+  .rail-nav a .dot{
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--panel-border);
+    flex-shrink: 0;
+    transition: background 0.15s ease;
+  }
+  .rail-nav a.active{ color: var(--text); }
+  .rail-nav a.active .dot{ background: var(--teal); box-shadow: 0 0 0 3px var(--teal-dim); }
+
+  .rail-status{
+    margin-top: auto;
+    padding-top: 24px;
+    border-top: 1px solid var(--panel-border);
+  }
+  .status-pill{
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--teal);
+    background: var(--teal-dim);
+    border: 1px solid rgba(95,217,198,0.3);
+    padding: 5px 10px;
+    border-radius: 20px;
+  }
+  .status-pill .pulse{
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--teal);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%, 100%{ opacity: 1; }
+    50%{ opacity: 0.35; }
+  }
+  .rail-location{
+    margin-top: 12px;
+    font-size: 0.78rem;
+    color: var(--text-faint);
+  }
+
+  /* ---------- main content ---------- */
+  main{
+    flex: 1;
+    min-width: 0;
+    padding: 48px 40px 80px;
+  }
+  .col{ max-width: var(--content-max); }
+
+  section{ padding-top: 64px; scroll-margin-top: 32px; }
+  section:first-of-type{ padding-top: 0; }
+
+  .section-label{
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--text-faint);
+    margin-bottom: 14px;
+  }
+  .section-label::before{ content: "// "; }
+
+  h2{ font-size: 1.5rem; margin-bottom: 20px; }
+
+  /* ---------- terminal ---------- */
+  .terminal{
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 40px;
+  }
+  .terminal-bar{
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--panel-border);
+  }
+  .terminal-bar span{
+    width: 9px; height: 9px; border-radius: 50%;
+    background: var(--panel-border);
+  }
+  .terminal-bar .label{
+    width: auto;
+    height: auto;
+    border-radius: 0;
+    background: none;
+    margin-left: 8px;
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--text-faint);
+  }
+  .terminal-body{
+    padding: 18px 20px 22px;
+    font-family: var(--mono);
+    font-size: 0.84rem;
+    color: var(--text-dim);
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .terminal-body .prompt{ color: var(--text); }
+  .terminal-body .pass{ color: var(--teal); }
+  .terminal-body .caret{
+    display: inline-block;
+    width: 7px; height: 1em;
+    background: var(--teal);
+    vertical-align: text-bottom;
+    animation: blink 1s step-end infinite;
+  }
+  @keyframes blink{ 50%{ opacity: 0; } }
+
+  /* ---------- hero ---------- */
+  .hero h1{
+    font-size: clamp(1.9rem, 3.4vw, 2.5rem);
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    margin-bottom: 18px;
+  }
+  .hero p{ font-size: 1.02rem; max-width: 62ch; }
+  .hero p:last-child{ margin-bottom: 0; }
+
+  /* ---------- timeline ---------- */
+  .timeline{
+    border-left: 1px solid var(--panel-border);
+    padding-left: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+  }
+  .timeline-item{ position: relative; }
+  .timeline-item::before{
+    content: "";
+    position: absolute;
+    left: -33px;
+    top: 5px;
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--teal);
+  }
+  .timeline-role{
+    font-size: 1.02rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .timeline-meta{
+    font-family: var(--mono);
+    font-size: 0.76rem;
+    color: var(--text-faint);
+    margin-top: 4px;
+    margin-bottom: 12px;
+  }
+  .timeline-item ul{
+    margin: 0;
+    padding-left: 18px;
+    color: var(--text-dim);
+    font-size: 0.94rem;
+  }
+  .timeline-item li{ margin-bottom: 7px; }
+  .timeline-item li:last-child{ margin-bottom: 0; }
+
+  /* ---------- projects ---------- */
+  .project{
+    border: 1px solid var(--panel-border);
+    border-left: 2px solid var(--panel-border);
+    border-radius: 6px;
+    margin-bottom: 12px;
+    background: var(--panel);
+    transition: border-left-color 0.15s ease;
+  }
+  .project[open]{ border-left-color: var(--teal); }
+  .project summary{
+    list-style: none;
+    cursor: pointer;
+    padding: 16px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .project summary::-webkit-details-marker{ display: none; }
+  .project-title-wrap{ display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .project-name{ font-weight: 600; color: var(--text); font-size: 0.98rem; }
+  .project-tagline{ font-size: 0.85rem; color: var(--text-faint); }
+  .project-right{ display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+  .pass-pill{
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    color: var(--teal);
+    background: var(--teal-dim);
+    padding: 3px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .chevron{
+    width: 9px; height: 9px;
+    border-right: 1.5px solid var(--text-faint);
+    border-bottom: 1.5px solid var(--text-faint);
+    transform: rotate(-45deg);
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+  }
+  .project[open] .chevron{ transform: rotate(45deg); }
+  .project-body{
+    padding: 0 18px 20px;
+    border-top: 1px solid var(--panel-border);
+    margin-top: 2px;
+    padding-top: 16px;
+  }
+  .project-body p{ font-size: 0.92rem; margin-bottom: 14px; }
+  .tag-row{ display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 14px; }
+  .tag{
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    border: 1px solid var(--panel-border);
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+  .project-link{ font-size: 0.88rem; }
+
+  /* ---------- stack ---------- */
+  .stack-group{ margin-bottom: 22px; }
+  .stack-group:last-child{ margin-bottom: 0; }
+  .stack-group-label{
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+  }
+  .stack-tags{ display: flex; flex-wrap: wrap; gap: 8px; }
+  .stack-tags .tag{ color: var(--text); }
+
+  /* ---------- contact ---------- */
+  .contact-list{ display: flex; flex-direction: column; gap: 10px; margin-bottom: 8px; }
+  .contact-list a{
+    font-size: 0.98rem;
+    color: var(--text);
+    display: inline-flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .contact-list a .k{
+    font-family: var(--mono);
+    font-size: 0.76rem;
+    color: var(--text-faint);
+    width: 68px;
+    flex-shrink: 0;
+  }
+  .contact-list a:hover{ color: var(--teal); }
+
+  footer{
+    margin-top: 64px;
+    padding-top: 24px;
+    border-top: 1px solid var(--panel-border);
+    font-size: 0.8rem;
+    color: var(--text-faint);
+  }
+
+  /* ---------- mobile ---------- */
+  .rail-toggle{ display: none; }
+
+  @media (max-width: 860px){
+    .shell{ flex-direction: column; }
+    .rail{
+      width: 100%;
+      height: auto;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: var(--bg);
+      padding: 18px 20px;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      border-right: none;
+      border-bottom: 1px solid var(--panel-border);
+    }
+    .rail-nav, .rail-status, .rail-location{ display: none; }
+    .rail-head{ display: flex; flex-direction: column; }
+    .rail-toggle{
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--teal);
+      background: var(--teal-dim);
+      border: 1px solid rgba(95,217,198,0.3);
+      border-radius: 20px;
+      padding: 6px 12px;
+    }
+    main{ padding: 32px 20px 60px; }
+    section{ padding-top: 48px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="rail" id="rail">
+    <div class="rail-head">
+      <div class="rail-name">TJ Scanlan</div>
+      <div class="rail-role">Senior AI Engineer<br>Agent Evaluation &amp; Platform</div>
+    </div>
+
+    <nav class="rail-nav" id="rail-nav">
+      <a href="#identity"><span class="dot"></span>identity</a>
+      <a href="#experience"><span class="dot"></span>experience</a>
+      <a href="#projects"><span class="dot"></span>projects</a>
+      <a href="#stack"><span class="dot"></span>stack</a>
+      <a href="#contact"><span class="dot"></span>contact</a>
+    </nav>
+
+    <a class="rail-toggle" href="#contact">get in touch</a>
+
+    <div class="rail-status">
+      <span class="status-pill"><span class="pulse"></span>open to opportunities</span>
+      <div class="rail-location">Medford, MA · Boston area</div>
+    </div>
+  </aside>
+
+  <main>
+    <div class="col">
+
+      <section id="identity">
+        <div class="terminal">
+          <div class="terminal-bar">
+            <span></span><span></span><span></span>
+            <span class="label">eval_run.sh</span>
+          </div>
+          <div class="terminal-body" id="term-body" aria-live="polite"></div>
+        </div>
+
+        <div class="hero">
+          <h1>I evaluate AI agents for a living, so I turned my own profile into an eval run.</h1>
+          <p>I'm a Senior AI Engineer building and shipping LLM-powered agents in production — then building the evaluation frameworks (EvalOps) that prove they still work after the tenth change to a prompt, tool, or model. The other half of the job is platform engineering: Kubernetes, Terraform, GCP and AWS, the plumbing that makes agentic features reliable enough to trust.</p>
+          <p>Before agents, I spent two and a half years as a cybersecurity data engineer, building the ETL pipelines and SQL models that fed the ML and analytics platforms I now help evaluate. I studied math and data science at Merrimack College, which is probably why "did it actually work" is the question I keep coming back to.</p>
+        </div>
+      </section>
+
+      <section id="experience">
+        <div class="section-label">experience</div>
+        <h2>Where I've worked</h2>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-role">Senior AI Engineer — Entegris, Inc.</div>
+            <div class="timeline-meta">Bedford, MA · Jan 2026 – Present</div>
+            <ul>
+              <li>Built agent evaluation frameworks — versioned test-prompt suites in code, repeatable eval runs — to measure agent reliability before and after deployment.</li>
+              <li>Shipped LLM-based agentic capabilities end to end: tool invocation, structured outputs, multi-step reasoning, with hands-on MCP integration to internal data and tools.</li>
+              <li>Integrated cross-platform agent builders (Copilot Studio → BigQuery) for testing and deployment across heterogeneous stacks.</li>
+              <li>Built AI-native internal tooling in TypeScript and Python, integrating LLM APIs and vector search.</li>
+              <li>Owned an "AI-ready" data initiative — schemas, labeling, feature pipelines, governance — for safe agent consumption of internal telemetry.</li>
+            </ul>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-role">Cybersecurity Data Engineer — Entegris, Inc.</div>
+            <div class="timeline-meta">Billerica, MA · Jul 2023 – Dec 2025</div>
+            <ul>
+              <li>Built and operated ETL pipelines ingesting high-volume telemetry from multiple security tool APIs, with strict access controls end to end.</li>
+              <li>Designed SQL data models and transformations powering security dashboards and audit reporting for leadership and engineering.</li>
+              <li>Maintained containerized ingestion services with monitoring and alerting for downstream ML pipelines.</li>
+              <li>Used Python and Go to build data cleaning, enrichment, and normalization tooling for ML-ready datasets.</li>
+            </ul>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-role">Data Specialist, Security Awareness — Entegris, Inc.</div>
+            <div class="timeline-meta">Billerica, MA · May 2022 – May 2023</div>
+            <ul>
+              <li>Analyzed phishing-campaign and security-awareness metrics in Python; built dashboards for leadership to monitor program performance.</li>
+              <li>Standardized and documented reporting processes, reducing onboarding friction across programs.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="projects">
+        <div class="section-label">projects</div>
+        <h2>Things I've built</h2>
+
+        <details class="project" open>
+          <summary>
+            <div class="project-title-wrap">
+              <span class="project-name">conduit</span>
+              <span class="project-tagline">observability for AI agents</span>
+            </div>
+            <div class="project-right"><span class="pass-pill">PASS</span><span class="chevron"></span></div>
+          </summary>
+          <div class="project-body">
+            <p>A secure, runtime-safe observability platform for AI agent traffic: mTLS-secured ingestion, NATS JetStream buffering, and dedicated storage split across traces (Tempo), metrics (VictoriaMetrics), and LLM payloads (ClickHouse). Built as a single static Go binary with SDKs for Go and Python agents — this is EvalOps thinking applied to production agent traffic instead of a test suite.</p>
+            <div class="tag-row">
+              <span class="tag">Go</span><span class="tag">gRPC</span><span class="tag">mTLS</span><span class="tag">NATS JetStream</span><span class="tag">ClickHouse</span>
+            </div>
+            <a class="project-link" href="https://github.com/tjscanlan/conduit">View on GitHub</a>
+          </div>
+        </details>
+
+        <details class="project">
+          <summary>
+            <div class="project-title-wrap">
+              <span class="project-name">mimic3-db-demo</span>
+              <span class="project-tagline">healthcare readmission modeling</span>
+            </div>
+            <div class="project-right"><span class="pass-pill">PASS</span><span class="chevron"></span></div>
+          </summary>
+          <div class="project-body">
+            <p>Predicts 30-day hospital readmission on the MIMIC-III Clinical Database Demo, running two approaches on the same patients — a gradient-boosted model on structured features, and a fine-tuned small language model on clinical text — into one shared evaluation harness. Research and education project, not a clinical tool.</p>
+            <div class="tag-row">
+              <span class="tag">Python</span><span class="tag">scikit-learn</span><span class="tag">LLM fine-tuning</span><span class="tag">Jupyter</span>
+            </div>
+            <a class="project-link" href="https://github.com/tjscanlan/mimic3-db-demo">View on GitHub</a>
+          </div>
+        </details>
+
+        <details class="project">
+          <summary>
+            <div class="project-title-wrap">
+              <span class="project-name">half-staff</span>
+              <span class="project-tagline">feature-flag / experimentation service</span>
+            </div>
+            <div class="project-right"><span class="pass-pill">PASS</span><span class="chevron"></span></div>
+          </summary>
+          <div class="project-body">
+            <p>A Go API (REST + gRPC) backed by Postgres for flag definitions and audit logging, and Redis for evaluation caching with pub/sub invalidation, plus a TypeScript SDK and demo consumer app. The platform primitive that makes it safe to roll out risky changes — agentic ones included — gradually.</p>
+            <div class="tag-row">
+              <span class="tag">Go</span><span class="tag">Postgres</span><span class="tag">Redis</span><span class="tag">TypeScript SDK</span>
+            </div>
+            <a class="project-link" href="https://github.com/tjscanlan/half-staff">View on GitHub</a>
+          </div>
+        </details>
+
+        <details class="project">
+          <summary>
+            <div class="project-title-wrap">
+              <span class="project-name">beer-reccommender</span>
+              <span class="project-tagline">recommendation system, side project</span>
+            </div>
+            <div class="project-right"><span class="pass-pill">PASS</span><span class="chevron"></span></div>
+          </summary>
+          <div class="project-body">
+            <p>A smaller-scope recommendation system in Python — the same "build a model, see if it's actually useful" itch, just lower stakes.</p>
+            <div class="tag-row">
+              <span class="tag">Python</span>
+            </div>
+            <a class="project-link" href="https://github.com/tjscanlan/beer-reccommender">View on GitHub</a>
+          </div>
+        </details>
+      </section>
+
+      <section id="stack">
+        <div class="section-label">stack</div>
+        <h2>What I work with</h2>
+
+        <div class="stack-group">
+          <div class="stack-group-label">AI &amp; agents</div>
+          <div class="stack-tags">
+            <span class="tag">LLM API integration</span><span class="tag">MCP</span><span class="tag">tool invocation</span><span class="tag">structured outputs</span><span class="tag">multi-step reasoning</span><span class="tag">agent evaluation (EvalOps)</span><span class="tag">vector search</span>
+          </div>
+        </div>
+        <div class="stack-group">
+          <div class="stack-group-label">Languages</div>
+          <div class="stack-tags">
+            <span class="tag">Python</span><span class="tag">TypeScript</span><span class="tag">Go</span><span class="tag">SQL</span>
+          </div>
+        </div>
+        <div class="stack-group">
+          <div class="stack-group-label">Cloud &amp; infrastructure</div>
+          <div class="stack-tags">
+            <span class="tag">GCP</span><span class="tag">AWS</span><span class="tag">Docker</span><span class="tag">Kubernetes</span><span class="tag">Terraform</span><span class="tag">Kafka</span><span class="tag">BigQuery</span>
+          </div>
+        </div>
+        <div class="stack-group">
+          <div class="stack-group-label">Practices</div>
+          <div class="stack-tags">
+            <span class="tag">CI/CD</span><span class="tag">observability</span><span class="tag">microservices</span><span class="tag">REST/gRPC API design</span><span class="tag">testing</span><span class="tag">Agile</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact">
+        <div class="section-label">contact</div>
+        <h2>Get in touch</h2>
+        <p>Always up for talking about agent evaluation, MLOps, or why "it demoed fine" is not the same as "it works."</p>
+        <div class="contact-list">
+          <a href="mailto:tjpscanlan.44@gmail.com"><span class="k">email</span>tjpscanlan.44@gmail.com</a>
+          <a href="https://linkedin.com/in/tj-scanlan"><span class="k">linkedin</span>linkedin.com/in/tj-scanlan</a>
+          <a href="https://github.com/tjscanlan"><span class="k">github</span>github.com/tjscanlan</a>
+        </div>
+
+        <footer>
+          suite complete · 5/5 sections passed · thanks for reading
+        </footer>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<script>
+(function(){
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var termBody = document.getElementById('term-body');
+
+  var lines = [
+    { text: '$ run-eval --suite=tj-scanlan --env=production', cls: 'prompt' },
+    { text: 'loading agent: tj-scanlan.profile ...', cls: '' },
+    { text: '> case: identity ................ ', cls: '', tail: 'PASS', tailCls: 'pass' },
+    { text: '> case: experience .............. ', cls: '', tail: 'PASS', tailCls: 'pass' },
+    { text: '> case: projects ................ ', cls: '', tail: 'PASS', tailCls: 'pass' },
+    { text: '> case: available_for_hire ...... ', cls: '', tail: 'PASS', tailCls: 'pass', suffix: ' (see contact)' },
+    { text: '', cls: '' },
+    { text: 'suite complete: 5/5 passed', cls: 'pass' }
+  ];
+
+  function renderStatic(){
+    var html = '';
+    lines.forEach(function(l){
+      var line = '<span class="' + l.cls + '">' + l.text + '</span>';
+      if (l.tail) line += '<span class="' + l.tailCls + '">' + l.tail + '</span>' + (l.suffix || '');
+      html += line + '\n';
+    });
+    termBody.innerHTML = html;
+  }
+
+  if (reduced) {
+    renderStatic();
+    return;
+  }
+
+  var lineIndex = 0, charIndex = 0, out = '';
+
+  function typeNext(){
+    if (lineIndex >= lines.length){
+      termBody.innerHTML = out;
+      return;
+    }
+    var l = lines[lineIndex];
+    if (charIndex === 0 && l.text === ''){
+      out += '\n';
+      lineIndex++;
+      charIndex = 0;
+      return setTimeout(typeNext, 120);
+    }
+    if (charIndex < l.text.length){
+      out += l.text.charAt(charIndex);
+      charIndex++;
+      termBody.innerHTML = out + '<span class="caret"></span>';
+      return setTimeout(typeNext, l.cls === 'prompt' ? 18 : 6);
+    } else {
+      if (l.tail) out += '<span class="' + l.tailCls + '">' + l.tail + '</span>' + (l.suffix || '');
+      out += '\n';
+      lineIndex++;
+      charIndex = 0;
+      termBody.innerHTML = out + '<span class="caret"></span>';
+      return setTimeout(typeNext, l.cls === 'pass' ? 260 : 140);
+    }
+  }
+
+  typeNext();
+
+  /* active section highlighting in the rail nav */
+  var navLinks = Array.prototype.slice.call(document.querySelectorAll('#rail-nav a'));
+  var sections = navLinks.map(function(a){ return document.querySelector(a.getAttribute('href')); });
+
+  var observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      var idx = sections.indexOf(entry.target);
+      if (idx === -1) return;
+      if (entry.isIntersecting){
+        navLinks.forEach(function(a){ a.classList.remove('active'); });
+        navLinks[idx].classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px', threshold: 0 });
+
+  sections.forEach(function(s){ if (s) observer.observe(s); });
+})();
+</script>
+
+</body>
+</html>
