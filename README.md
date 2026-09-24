@@ -24,17 +24,17 @@ I think the hard part of agentic AI isn't getting a demo to work once — it's *
 
 ## 📌 Pinned Projects
 
+### [conduit](https://github.com/tjscanlan/conduit)
+A secure, runtime-safe **observability platform for AI agents** — mTLS-secured ingestion, NATS JetStream buffering, and dedicated storage for traces, metrics, and LLM payloads (ClickHouse). Built in Go with SDKs for Go and Python agents. This is basically EvalOps infrastructure applied to production agent traffic: schema-validated ingestion, per-agent rate limiting, and a query layer for digging into what an agent actually did.
+
+### [allstar-negotiator](https://github.com/tjscanlan/allstar-negotiator)
+A **multi-agent negotiation demo**: two Claude-backed agents with opposing goals haggle over a resource split while a deterministic arbiter judges convergence and stalls, and a React frontend streams every round live over WebSockets. TypeScript end to end on Bun — Zod-typed event schemas, structured output via tool use, and SQLite-persisted event history so any run can be replayed.
+
 ### [mimic3-db-demo](https://github.com/tjscanlan/mimic3-db-demo)
 A healthcare ML portfolio project predicting 30-day hospital readmission on the MIMIC-III Clinical Database Demo — running two parallel approaches on the same patients (gradient-boosted model on structured features vs. a fine-tuned small language model on clinical text) into a shared evaluation harness. The eval-harness-first mindset here is the same one I use at work.
 
 ### [half-staff](https://github.com/tjscanlan/half-staff)
 A feature-flag / experimentation service: Go API (REST + gRPC), Postgres for flag definitions and audit logging, Redis for evaluation caching with pub/sub invalidation, plus a TypeScript SDK. The kind of platform primitive that makes it safe to roll out risky changes — including agentic ones — gradually.
-
-### [beer-reccommender](https://github.com/tjscanlan/beer-reccommender)
-A recommendation-system side project in Python — smaller in scope, but scratches the same "build a model, see if it's actually useful" itch.
-
-### [conduit](https://github.com/tjscanlan/conduit)
-A secure, runtime-safe **observability platform for AI agents** — mTLS-secured ingestion, NATS JetStream buffering, and dedicated storage for traces, metrics, and LLM payloads (ClickHouse). Built in Go with SDKs for Go and Python agents. This is basically EvalOps infrastructure applied to production agent traffic: schema-validated ingestion, per-agent rate limiting, and a query layer for digging into what an agent actually did.
 
 ---
 
